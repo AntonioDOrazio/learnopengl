@@ -70,8 +70,8 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>C:\Users\Antonio\Desktop\learnopengl\Libraries;C:\Users\Antonio\Desktop\OpenGl_Tutorial\Libraries;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\Users\Antonio\Desktop\learnopengl\Libraries;C:\Users\Antonio\Desktop\OpenGl_Tutorial\Libraries;$(LibraryPath)</LibraryPath>
+    <IncludePath>C:\Users\Antonio\Desktop\learnopengl\Libraries;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\Users\Antonio\Desktop\learnopengl\Libraries;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
