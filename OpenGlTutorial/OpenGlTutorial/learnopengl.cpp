@@ -2,8 +2,6 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
-using namespace std;
-
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void processInput(GLFWwindow *window); 
 
@@ -33,7 +31,7 @@ int main()
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-	
+
 	// glfw window creation
 	GLFWwindow* window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "LearnOpenGL", NULL, NULL);
 	if (window == NULL)
@@ -75,14 +73,22 @@ int main()
 
 	// set up vertex data and buffers and configure vertex attributes
 	float vertices[] = {
-		-0.5f, -0.5f, 0.0f,   // left
-		 0.5f, -0.5f, 0.0f,   // right
-		 0.0f,  0.5f, 0.0f    // top
+		0.5f, 0.5f, 0.0f, //top right
+		0.5f, -0.5f, 0.0f, //bottom right
+		-0.5f, -0.5f, 0.0f, //bottom left
+		-0.5f, 0.5f, 0.0f //top left
+
 	};
 
-	unsigned int VBO, VAO;
+	unsigned int indices[] = {
+		0, 1, 3, //first triangle
+		1, 2, 3 //second triangle
+	};
+
+	unsigned int VBO, VAO, EBO;
 	glGenVertexArrays(1, &VAO);
 	glGenBuffers(1, &VBO);
+	glGenBuffers(1, &EBO);
 
 	// 1. bind Vertex Array Object
 	glBindVertexArray(VAO);
@@ -91,12 +97,19 @@ int main()
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
+	// bind and set element array buffer
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+
 	// 3. then set our vertex attributes pointers	
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(0);
 
 	// can safely unbind VBO after registration
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+	// for wireframe view
+	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
 	// Render loop
 	while (!glfwWindowShouldClose(window))
@@ -111,7 +124,7 @@ int main()
 		// 4. draw the object	
 		glUseProgram(shaderProgram);
 		glBindVertexArray(VAO);
-		glDrawArrays(GL_TRIANGLES, 0, 3);
+		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
 		// glfw: swap buffers and poll IO events 
 		glfwSwapBuffers(window);
@@ -121,6 +134,7 @@ int main()
 	// deallocate all resources once they've outlived their purpose
 	glDeleteVertexArrays(1, &VAO);
 	glDeleteBuffers(1, &VBO);
+	glDeleteBuffers(1, &EBO);
 
 	glfwTerminate();
 	return 0;
